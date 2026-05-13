@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAMIHE - Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Libre+Baskerville:wght@400;700&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #cca876;
+            --primary-dark: #92754c;
+            --dark-bg: #561713;
+            --text-dark: #2c2c2c;
+            --text-light: #f4f4f4;
+            --white: #ffffff;
+            --gray-light: #ededed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Libre Baskerville', serif;
+            font-weight: 700;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding: 8px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .top-bar-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .top-bar-info i {
+            color: var(--primary);
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .language-switcher a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .language-switcher img {
+            width: 18px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .social-icons a {
+            color: var(--text-light);
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--gray-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo-text {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            font-size: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: 'Libre Baskerville', serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 6px 10px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .search-icon {
+            font-size: 16px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: color 0.3s ease;
+            background: #f4f4f4;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .search-icon:hover {
+            color: var(--primary);
+            background: #ededed;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #a45a24;
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.1;
+            mix-blend-mode: overlay;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 16px;
+            font-weight: 600;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Countries Section */
+        .countries {
+            padding: 80px 20px;
+            text-align: center;
+            background: #1a1a1a;
+            color: var(--white);
+            position: relative;
+        }
+
+        .countries-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .countries-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .countries h2 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .countries h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            margin: 10px auto 0;
+        }
+
+        .carousel {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .carousel-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            width: 220px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .flag-container {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+        }
+
+        .flag-container img {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .country-name {
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.4);
+            color: var(--white);
+        }
+
+        /* Carousel Navigation */
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .nav-btn {
+            background: var(--white);
+            color: var(--text-dark);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .top-bar-container {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .header-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="top-bar-info">
+                <span><i class="fas fa-map-marker-alt"></i> Rua da Sé nº 114, Pestana Rovuma Hotel</span>
+                <span><i class="fas fa-phone-alt"></i> +25821310045</span>
+                <span><i class="fas fa-envelope"></i> geral@aamihe.com</span>
+            </div>
+            <div class="top-bar-right">
+                <div class="language-switcher">
+                    <a href="#"><img src="https://flagcdn.com/w20/pt.png" alt="PT"> PT</a>
+                    <a href="#"><img src="https://flagcdn.com/w20/fr.png" alt="FR"> FR</a>
+                    <a href="#"><img src="https://flagcdn.com/w20/gb.png" alt="EN"> EN</a>
+                </div>
+                <div class="social-icons">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://aamihe.com/wp-content/uploads/2021/08/cropped-Logo-32x32.png" alt="AAMIHE Logo">
+                <div class="logo-text">
+                    AAMIHE
+                    <span>ASSOCIATION OF METHODIST INSTITUTIONS<br>OF HIGHER EDUCATION</span>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">INÍCIO</a></li>
+                    <li><a href="#">SOBRE-NÓS</a></li>
+                    <li><a href="#">SERVIÇOS</a></li>
+                    <li><a href="#">CONFERÊNCIA</a></li>
+                    <li><a href="#">BLOG</a></li>
+                    <li><a href="#">CONTACTE-NOS</a></li>
+                </ul>
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>BEM-VINDO</h1>
+            <p>À AAIMES – Associação Africana de Instituições Metodistas de Ensino Superior</p>
+        </div>
+    </section>
+
+    <!-- Countries Section -->
+    <section class="countries">
+        <div class="countries-bg"></div>
+        <div class="countries-container">
+            <h2>Países associados</h2>
+            
+            <div class="carousel">
+                <!-- Kenya -->
+                <div class="carousel-item">
+                    <div class="flag-container">
+                        <img src="https://flagcdn.com/w320/ke.png" alt="Kenya Flag">
+                    </div>
+                    <div class="country-name">KENYA</div>
+                </div>
+                
+                <!-- Liberia -->
+                <div class="carousel-item">
+                    <div class="flag-container">
+                        <img src="https://flagcdn.com/w320/lr.png" alt="Liberia Flag">
+                    </div>
+                    <div class="country-name">LIBERIA</div>
+                </div>
+                
+                <!-- Mozambique -->
+                <div class="carousel-item">
+                    <div class="flag-container">
+                        <img src="https://flagcdn.com/w320/mz.png" alt="Mozambique Flag">
+                    </div>
+                    <div class="country-name">MOZAMBIQUE</div>
+                </div>
+                
+                <!-- Nigeria -->
+                <div class="carousel-item">
+                    <div class="flag-container">
+                        <img src="https://flagcdn.com/w320/ng.png" alt="Nigeria Flag">
+                    </div>
+                    <div class="country-name">NIGERIA</div>
+                </div>
+            </div>
+
+            <!-- Carousel Nav -->
+            <div class="carousel-nav">
+                <div class="nav-btn"><i class="fas fa-chevron-left"></i></div>
+                <div class="nav-btn"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

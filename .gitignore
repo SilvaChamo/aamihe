@@ -1,0 +1,7 @@
+.next
+node_modules
+node_modules_partial_*
+.npm-cache
+.env.local
+.vercel
+*.log

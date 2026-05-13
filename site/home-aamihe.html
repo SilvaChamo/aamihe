@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AAMIHE — Início</title>
+  <style>
+    :root {
+      --color-topbar: #442709;
+      --color-topbar-text: #f4f4f4;
+      --color-accent: #c9a068;
+      --color-accent-dark: #92754c;
+      --color-text: #1a1a1a;
+      --color-muted: #6b6b6b;
+      /* Barra boas-vindas — ochre (fundo pedido pelo design; bordo mais claro) */
+      --color-welcome: #a96826;
+      --color-welcome-border: #fd7622;
+      --color-green: #4d822b;
+      --color-footer: #3f444a;
+      --color-footer-muted: #a0a8b1;
+      --color-news-bg: #f0ebe4;
+      --font-serif: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+      --font-sans: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+      --max-width: 1200px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--color-text);
+      background: #fff;
+    }
+    img { max-width: 100%; height: auto; vertical-align: middle; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--color-accent); }
+
+    /* Top utility bar — compacto (referência captura) */
+    .topbar {
+      background: var(--color-topbar);
+      color: var(--color-topbar-text);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+    .topbar-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 12px;
+      min-height: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px 10px;
+    }
+    .topbar-icon-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .topbar-icon-list > li {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .topbar-icon-list .elementor-icon-list-icon {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      line-height: 0;
+    }
+    .topbar-icon-list .elementor-icon-list-text { line-height: 1.35; }
+    .topbar-icon-list svg.e-font-icon-svg {
+      flex-shrink: 0;
+      opacity: 0.9;
+      width: 13px;
+      height: 13px;
+      vertical-align: middle;
+    }
+    .topbar-icon-list a.mailto-touch {
+      color: inherit;
+      text-decoration: none;
+    }
+    .topbar-icon-list a.mailto-touch:hover {
+      text-decoration: underline;
+      color: #fff !important;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .lang-switch > li {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .lang-switch a {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 5px 6px;
+      color: var(--color-topbar-text);
+      font-weight: 600;
+      line-height: 0;
+      border-radius: 2px;
+    }
+    .lang-switch img.trp-flag-image { border-radius: 2px; }
+    .lang-switch .lang-btn.is-current {
+      opacity: 1;
+    }
+    .lang-switch .lang-btn:not(.is-current) { opacity: 0.88; }
+    .icon-fb svg { width: 14px; height: 14px; fill: currentColor; }
+    .topbar .e-font-icon-svg { fill: currentColor; }
+
+    /* Barra principal — 70px de altura; seleção ativa em caixa baixa */
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #e8e8e8;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+      min-height: 70px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px 12px;
+    }
+    @media (min-width: 960px) {
+      .header-inner {
+        grid-template-columns: auto 1fr auto;
+      }
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      line-height: 0;
+    }
+    .logo img {
+      max-height: 44px;
+      width: auto;
+      height: auto;
+      border: none;
+      padding: 0;
+      display: block;
+    }
+    .main-nav {
+      display: none;
+      justify-content: flex-end;
+    }
+    @media (min-width: 960px) {
+      .main-nav { display: flex; }
+    }
+    .main-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: stretch;
+      gap: 0 2px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      letter-spacing: 0.085em;
+      font-weight: 600;
+      text-transform: uppercase;
+      min-height: 70px;
+    }
+    .main-nav a {
+      position: relative;
+      z-index: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      min-height: 70px;
+      color: var(--color-text);
+      box-sizing: border-box;
+    }
+    .main-nav a.is-active {
+      outline: none;
+    }
+    .main-nav a.is-active::after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 30px;
+      border: 1px solid var(--color-accent);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .header-tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+    .search-btn {
+      width: 34px;
+      height: 34px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .search-btn svg { width: 16px; height: 16px; }
+    .burger {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    @media (min-width: 960px) {
+      .burger { display: none; }
+    }
+    .burger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-text);
+    }
+    .mobile-nav {
+      display: none;
+      border-top: 1px solid #eee;
+      padding: 12px 20px 20px;
+    }
+    .mobile-nav.is-open { display: block; }
+    @media (min-width: 960px) {
+      .mobile-nav { display: none !important; }
+    }
+    .mobile-nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .mobile-nav a { display: block; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+
+    /* Barra de boas-vindas — borda inferior laranja #fd7622; sombra suave */
+    .elementor-welcome-slides.e-con-boxed {
+      --content-width: min(100%, 1140px);
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+      z-index: 9;
+      border-style: solid;
+      border-width: 0 0 1px 0;
+      border-color: var(--color-welcome-border);
+      box-shadow:
+        0 4px 14px rgba(169, 104, 38, 0.2),
+        0 8px 24px rgba(0, 0, 0, 0.05);
+      background: var(--color-welcome);
+      color: #fff;
+    }
+    .elementor-welcome-slides .e-con-inner {
+      margin: 0 auto;
+      width: 100%;
+      max-width: var(--content-width);
+      padding: 14px 18px 16px;
+      box-sizing: border-box;
+    }
+    .home-welcome-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      min-height: 64px;
+    }
+    .home-welcome-inner .elementor-slide-heading {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(0.98rem, 2.2vw, 1.28rem);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+    .home-welcome-inner .elementor-slide-description {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(11px, 1.85vw, 13px);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: 0.02em;
+      opacity: 0.96;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    /* Hero + countries */
+    .hero-countries {
+      position: relative;
+      min-height: 420px;
+      background: #1a1a1a center/cover no-repeat;
+      background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.5)), url("./conferencia_files/Imagem1.jpg.webp");
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px 64px;
+      color: #fff;
+      text-align: center;
+    }
+    .hero-countries h2 {
+      margin: 0 0 28px;
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 400;
+    }
+    .flags-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 900px;
+    }
+    .flag-card {
+      flex: 1 1 140px;
+      max-width: 180px;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    .flag-card img {
+      display: block;
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+    }
+    .flag-card figcaption {
+      background: rgba(0,0,0,0.75);
+      padding: 8px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Sobre nós card */
+    .sobre-wrap {
+      max-width: var(--max-width);
+      margin: -80px auto 0;
+      padding: 0 20px 40px;
+      position: relative;
+      z-index: 2;
+    }
+    .sobre-card {
+      background: #fff;
+      border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      padding: 40px 32px 36px;
+      text-align: center;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .sobre-card .icon-cap {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 16px;
+      color: var(--color-accent-dark);
+    }
+    .sobre-card h2 {
+      margin: 0 0 16px;
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      color: var(--color-accent-dark);
+    }
+    .sobre-card p {
+      margin: 0 auto 24px;
+      max-width: 62ch;
+      color: var(--color-muted);
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .btn-green {
+      background: var(--color-green);
+      color: #fff;
+    }
+    .btn-green:hover { filter: brightness(1.08); color: #fff; }
+
+    /* Missão / Visão */
+    .mission-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px 20px 56px;
+    }
+    .mission-grid {
+      display: grid;
+      gap: 24px;
+    }
+    @media (min-width: 768px) {
+      .mission-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .mission-box {
+      border: 2px solid #c4c4c4;
+      box-shadow: inset 0 0 0 1px var(--color-accent);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .mission-box .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      color: var(--color-accent-dark);
+    }
+    .mission-box h3 {
+      margin: 0 0 12px;
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+    }
+    .mission-box p {
+      margin: 0;
+      color: var(--color-muted);
+      font-size: 14px;
+    }
+    .mission-cta {
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    /* Conferência hero band */
+    .conf-band {
+      position: relative;
+      min-height: 380px;
+      background: #222 center/cover no-repeat;
+      background-image: linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 45%), url("./Blog_files/President-Kongolo-Chijika-1.jpg.webp");
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 40px 24px;
+    }
+    .conf-panel {
+      max-width: 440px;
+      background: rgba(43, 29, 14, 0.92);
+      border: 1px solid var(--color-accent);
+      color: #fff;
+      padding: 28px 24px 32px;
+    }
+    .conf-panel h2 {
+      margin: 0 0 14px;
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+    }
+    .conf-panel p { margin: 0 0 16px; font-size: 14px; opacity: 0.95; }
+    .conf-panel ul {
+      margin: 0 0 20px;
+      padding-left: 1.1em;
+      font-size: 14px;
+    }
+    @media (max-width: 767px) {
+      .conf-band { justify-content: center; }
+      .conf-panel { max-width: 100%; }
+    }
+
+    /* Direção */
+    .direcao {
+      padding: 56px 20px 48px;
+      text-align: center;
+    }
+    .direcao h2 {
+      margin: 0 0 12px;
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+    .direcao .intro {
+      max-width: 720px;
+      margin: 0 auto 36px;
+      color: var(--color-muted);
+      font-size: 14px;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) {
+      .team-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .team-card {
+      background: #1f1f1f;
+      border-radius: 4px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .team-card img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+    }
+    .team-card .meta {
+      padding: 14px 10px 16px;
+      color: #ccc;
+      font-size: 12px;
+    }
+    .team-card .meta strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .team-card .lang {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #333;
+      font-size: 11px;
+      color: #999;
+    }
+
+    /* Notícias */
+    .noticias {
+      background: var(--color-news-bg);
+      border-top: 3px solid var(--color-accent);
+      padding: 48px 20px 56px;
+    }
+    .noticias h2 {
+      text-align: center;
+      margin: 0 0 32px;
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+    .news-grid {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .news-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .news-card {
+      display: flex;
+      gap: 16px;
+      background: #fff;
+      padding: 14px;
+      border-radius: 4px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      align-items: flex-start;
+    }
+    .news-card img {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border-radius: 2px;
+    }
+    .news-card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .news-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--color-footer);
+      color: var(--color-footer-muted);
+      border-top: 4px solid var(--color-accent);
+      padding: 48px 20px 32px;
+      font-size: 13px;
+    }
+    .footer-grid {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      gap: 36px;
+    }
+    @media (min-width: 900px) {
+      .footer-grid {
+        grid-template-columns: 1.1fr 0.9fr 1fr 1fr;
+        gap: 28px;
+      }
+    }
+    .footer-brand .logo-box {
+      background: #fff;
+      padding: 16px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .footer-brand .logo-box img { max-height: 100px; }
+    .footer-brand p {
+      font-family: var(--font-serif);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .footer-widget h3 {
+      position: relative;
+      margin: 0 0 16px;
+      padding-left: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: none;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+    .footer-widget h3::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      bottom: 2px;
+      width: 3px;
+      background: var(--color-accent);
+    }
+    .footer-links ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .footer-links li {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+    }
+    .footer-links li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+    }
+    .footer-links a { color: var(--color-footer-muted); }
+    .footer-links a:hover { color: #fff; }
+    .visit-intro { margin-bottom: 16px; line-height: 1.6; }
+    .contact-block {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .contact-block .ico {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-accent);
+    }
+    .contact-block strong {
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+    .newsletter-form { margin-top: 8px; }
+    .newsletter-form .row {
+      display: flex;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .newsletter-form input[type="email"] {
+      flex: 1;
+      border: none;
+      padding: 12px 14px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+    }
+    .newsletter-form button {
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+    .newsletter-form button:hover { background: var(--color-accent-dark); }
+    .newsletter-form label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .social-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .social-row a {
+      width: 48px;
+      height: 48px;
+      background: #2f3439;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-footer-muted);
+    }
+    .social-row a:hover { color: #fff; }
+
+    .scroll-top {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      width: 44px;
+      height: 44px;
+      background: #2f3439;
+      color: #fff;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .scroll-top:hover { color: #fff; background: var(--color-accent-dark); }
+  </style>
+</head>
+<body>
+  <a class="screen-reader" href="#main" style="position:absolute;left:-9999px;">Saltar para o conteúdo</a>
+
+  <!-- Barra castanha — estrutura alinhada ao Elementor / TranslatePress -->
+  <div class="topbar e-con-topbar" lang="pt-PT">
+    <div class="topbar-inner e-con-inner">
+      <div class="topbar-contact-wrap elementor-widget-icon-list">
+        <ul class="topbar-icon-list elementor-icon-list-items elementor-inline-items">
+          <li class="elementor-icon-list-item elementor-inline-item">
+            <span class="elementor-icon-list-icon">
+              <svg aria-hidden="true" class="e-font-icon-svg e-fas-map-marker-alt" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg>
+            </span>
+            <span class="elementor-icon-list-text">Rua da Sé nº 114, Pestana Rovuma Hotel</span>
+          </li>
+          <li class="elementor-icon-list-item elementor-inline-item">
+            <span class="elementor-icon-list-icon">
+              <svg aria-hidden="true" class="e-font-icon-svg e-fas-phone-alt" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"></path></svg>
+            </span>
+            <span class="elementor-icon-list-text">+25821310045</span>
+          </li>
+          <li class="elementor-icon-list-item elementor-inline-item">
+            <span class="elementor-icon-list-icon">
+              <svg aria-hidden="true" class="e-font-icon-svg e-fas-envelope" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7z"></path><path d="M256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path></svg>
+            </span>
+            <span class="elementor-icon-list-text"><a class="mailto-touch" href="mailto:geral@aamihe.com">geral@aamihe.com</a></span>
+          </li>
+        </ul>
+      </div>
+      <div class="topbar-right">
+        <nav class="elementor-nav-wrap" aria-label="Idioma">
+          <ul class="lang-switch elementor-nav-menu elementor-nav-menu--layout-horizontal">
+            <li class="trp-language-switcher-container menu-item menu-item-lang">
+              <a href="#" class="elementor-item lang-btn is-current" data-locale="pt" title="Português">
+                <img class="trp-flag-image" src="./AAMIHE_files/pt_PT.png" width="18" height="12" alt="Português">
+              </a>
+            </li>
+            <li class="trp-language-switcher-container menu-item menu-item-lang">
+              <a href="#" class="elementor-item lang-btn" data-locale="fr" title="Français">
+                <img class="trp-flag-image" src="./AAMIHE_files/fr_FR.png" width="18" height="12" alt="Français">
+              </a>
+            </li>
+            <li class="trp-language-switcher-container menu-item menu-item-lang">
+              <a href="#" class="elementor-item lang-btn" data-locale="en" title="English (UK)">
+                <img class="trp-flag-image" src="./AAMIHE_files/en_GB.png" width="18" height="12" alt="English (UK)">
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="elementor-social-icons-wrapper elementor-social-icon-fb-wrap">
+          <a class="icon-fb elementor-icon elementor-social-icon elementor-social-icon-facebook" href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <svg aria-hidden="true" class="e-font-icon-svg e-fab-facebook" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="home-aamihe.html"><img src="./AAMIHE_files/Logo-Small.png.webp" width="724" height="201" alt="AAMIHE"></a>
+      <nav class="main-nav" aria-label="Principal">
+        <ul>
+          <li><a href="home-aamihe.html" class="is-active" data-i18n="navHome">INÍCIO</a></li>
+          <li><a href="About.htm" data-i18n="navAbout">SOBRE-NÓS</a></li>
+          <li><a href="servicos.html" data-i18n="navServices">SERVIÇOS</a></li>
+          <li><a href="conferencia.html" data-i18n="navConference">CONFERÊNCIA</a></li>
+          <li><a href="Blog.html" data-i18n="navBlog">BLOG</a></li>
+          <li><a href="contacte-nos.html" data-i18n="navContact">CONTACTE-NOS</a></li>
+        </ul>
+      </nav>
+      <div class="header-tools">
+        <button type="button" class="search-btn" aria-label="Pesquisar" data-i18n-aria="ariaSearch">
+          <svg width="20" height="20" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+        </button>
+        <button type="button" class="burger" aria-expanded="false" aria-controls="mobile-menu" id="burger-btn" aria-label="Abrir menu" data-i18n-aria="ariaMenuOpen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-menu" aria-label="Mobile">
+      <ul>
+        <li><a href="home-aamihe.html" data-i18n="navHome">INÍCIO</a></li>
+        <li><a href="About.htm" data-i18n="navAbout">SOBRE-NÓS</a></li>
+        <li><a href="servicos.html" data-i18n="navServices">SERVIÇOS</a></li>
+        <li><a href="conferencia.html" data-i18n="navConference">CONFERÊNCIA</a></li>
+        <li><a href="Blog.html" data-i18n="navBlog">BLOG</a></li>
+        <li><a href="contacte-nos.html" data-i18n="navContact">CONTACTE-NOS</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- Barra laranja: cópias em 3 línguas via data-i18n (sem API de tradução) -->
+    <section class="elementor-welcome-slides e-con e-con-boxed" aria-labelledby="welcome-slides-title">
+      <h2 id="welcome-slides-title" class="visually-hidden" data-i18n="welcomeSrTitle">Boas-vindas</h2>
+      <div class="e-con-inner">
+        <div class="home-welcome-inner">
+          <h1 class="elementor-slide-heading" data-i18n="welcomeTitle">BEM–VINDO</h1>
+          <p class="elementor-slide-description" data-i18n="welcomeDesc">AAMIHE — Associação Africana de Instituições Metodistas de Ensino Superior</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero-countries" aria-labelledby="countries-heading">
+      <h2 id="countries-heading" data-i18n="countriesTitle">Países associados</h2>
+      <div class="flags-row">
+        <figure class="flag-card">
+          <img src="https://flagcdn.com/w160/mz.png" width="160" height="100" alt="">
+          <figcaption data-i18n="countryMZ">Moçambique</figcaption>
+        </figure>
+        <figure class="flag-card">
+          <img src="https://flagcdn.com/w160/ng.png" width="160" height="100" alt="">
+          <figcaption data-i18n="countryNG">Nigéria</figcaption>
+        </figure>
+        <figure class="flag-card">
+          <img src="https://flagcdn.com/w160/sl.png" width="160" height="100" alt="">
+          <figcaption data-i18n="countrySL">Serra Leoa</figcaption>
+        </figure>
+        <figure class="flag-card">
+          <img src="https://flagcdn.com/w160/tz.png" width="160" height="100" alt="">
+          <figcaption data-i18n="countryTZ">Tanzânia</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="sobre-wrap">
+      <article class="sobre-card">
+        <svg class="icon-cap" viewBox="0 0 640 512" fill="currentColor" aria-hidden="true"><path d="M622.34 153.2L343.4 67.5c-15.2-4.67-31.6-4.67-46.79 0L17.66 153.2c-23.54 7.23-23.54 38.36 0 45.59l48.63 14.94c-10.67 13.19-17.23 29.28-17.88 46.9C38.78 266.15 32 276.11 32 288c0 10.78 5.68 19.85 13.86 25.65L20.33 428.53C18.11 438.52 25.71 448 35.94 448h56.11c10.24 0 17.84-9.48 15.62-19.47L82.14 313.65C90.32 307.85 96 298.78 96 288c0-11.57-6.47-21.25-15.66-26.87.76-15.02 8.44-28.3 20.69-36.72L296.6 284.5c9.06 2.78 26.44 6.25 46.79 0l278.95-85.7c23.55-7.24 23.55-38.36 0-45.6zM352.79 315.09c-28.53 8.76-52.84 3.92-65.59 0l-145.02-44.55L128 384c0 35.35 85.96 64 192 64s192-28.65 192-64l-14.18-113.47-145.03 44.56z"/></svg>
+        <h2 data-i18n="sobreTitle">Sobre nós</h2>
+        <p data-i18n="sobreText">A AAMIHE é uma associação de instituições de ensino superior da Igreja Metodista Unida ou relacionadas, unanimemente criada numa conferência das instituições de ensino superior da Igreja Metodista Unida em África, em Setembro de 2014, em Nairóbi — Quénia.</p>
+        <a class="btn btn-green" href="About.htm" data-i18n="readMore">LEIA MAIS</a>
+      </article>
+    </div>
+
+    <section class="mission-section" aria-labelledby="mission-heading">
+      <h2 id="mission-heading" class="visually-hidden" data-i18n="missionSr">Missão e visão</h2>
+      <div class="mission-grid">
+        <article class="mission-box">
+          <svg class="icon" viewBox="0 0 640 512" fill="currentColor" aria-hidden="true"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64l-41.6-192C662 89.3 644 72 622 72H302c-22 0-40 17.3-40.4 40L220 256H111c-17.7 0-32 14.3-32 32v32c0 17.7 14.3 32 32 32h448c17.7 0 32-14.3 32-32v-32c0-17.7-14.3-32-32-32z"/></svg>
+          <h3 data-i18n="missionTitle">Missão</h3>
+          <p data-i18n="missionText">Partilhar e partilhar experiências, criar mecanismos de cooperação para consolidar as instituições metodistas de ensino superior em África.</p>
+        </article>
+        <article class="mission-box">
+          <svg class="icon" viewBox="0 0 576 512" fill="currentColor" aria-hidden="true"><path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/></svg>
+          <h3 data-i18n="visionTitle">Visão</h3>
+          <p data-i18n="visionText">Ser referência continental na integração e no fortalecimento das instituições metodistas de ensino superior e do desenvolvimento educativo em África.</p>
+        </article>
+      </div>
+      <div class="mission-cta">
+        <a class="btn btn-green" href="About.htm" data-i18n="readMore">LEIA MAIS</a>
+      </div>
+    </section>
+
+    <section class="conf-band" aria-labelledby="conf-title">
+      <div class="conf-panel">
+        <h2 id="conf-title" data-i18n="confTitle">A Conferência</h2>
+        <p data-i18n="confLead">Junte-se a líderes educacionais, investigadores e instituições metodistas de ensino superior na conferência sobre parcerias panafricanas para o desenvolvimento sustentável do ensino superior.</p>
+        <p><strong data-i18n="confDateLabel">A realizar:</strong></p>
+        <ul>
+          <li data-i18n="confDate">13 a 15 de outubro de 2025</li>
+          <li data-i18n="confVenue">Hotel Birchwood, Joanesburgo, África do Sul</li>
+        </ul>
+        <a class="btn btn-green" href="conferencia.html" data-i18n="readMore">LEIA MAIS</a>
+      </div>
+    </section>
+
+    <section class="direcao" aria-labelledby="direcao-title">
+      <h2 id="direcao-title" data-i18n="direcaoTitle">A Direcção</h2>
+      <p class="intro" data-i18n="direcaoIntro">A AAMIHE agrega instituições metodistas de ensino superior em África — conheça alguns membros da direção.</p>
+      <div class="team-grid">
+        <article class="team-card">
+          <img src="./AAMIHE_files/6-Peter-Mageto-Secretary-compressed-scaled.jpg.webp" alt="Peter Mageto">
+          <div class="meta">
+            <strong>Peter Mageto</strong>
+            Secretary
+            <div class="lang" data-i18n="langEn">Inglês</div>
+          </div>
+        </article>
+        <article class="team-card">
+          <img src="./AAMIHE_files/3-Tiago-Caungo-Mutombo-Vice-President-Lusophone-compressed-scaled.jpg.webp" alt="Tiago Caungo Mutombo">
+          <div class="meta">
+            <strong>Tiago Caungo Mutombo</strong>
+            Vice-President Lusophone
+            <div class="lang" data-i18n="langPt">Português</div>
+          </div>
+        </article>
+        <article class="team-card">
+          <img src="./AAMIHE_files/4-Rene-Gnalega-Vice-President-Francophone-compressed-scaled.jpg.webp" alt="René Gnalega">
+          <div class="meta">
+            <strong>René Gnalega</strong>
+            Vice-President Francophone
+            <div class="lang" data-i18n="langFr">Francês</div>
+          </div>
+        </article>
+        <article class="team-card">
+          <img src="./AAMIHE_files/5-Yar-Donlah-Gonway-Gono-Vice-President-Anglophone-compressed-scaled.jpg.webp" alt="Yar Donlah Gonway Gono">
+          <div class="meta">
+            <strong>Yar Donlah Gonway Gono</strong>
+            Vice-President Anglophone
+            <div class="lang" data-i18n="langEn">Inglês</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="noticias" aria-labelledby="noticias-title">
+      <h2 id="noticias-title" data-i18n="newsTitle">Notícias</h2>
+      <div class="news-grid">
+        <article class="news-card">
+          <img src="./Blog_files/Ocean-acidification-training.jpeg.webp" alt="">
+          <div>
+            <h3><a href="#">GoL, UMU, EPA Launch Ocean Acidification Training for West Africa</a></h3>
+            <p>Parceria entre instituições para formação sobre acidificação dos oceanos na região.</p>
+          </div>
+        </article>
+        <article class="news-card">
+          <img src="./Blog_files/bed4c6ab-bf65-48aa-9d9d-61de5d50f21a.jpeg.webp" alt="">
+          <div>
+            <h3><a href="#">MASHONALAND EAST DEVELOPMENT PULSE</a></h3>
+            <p>Atualização sobre desenvolvimento e iniciativas na região.</p>
+          </div>
+        </article>
+        <article class="news-card">
+          <img src="./Blog_files/President-Kongolo-Chijika-1.jpg.webp" alt="">
+          <div>
+            <h3><a href="#">Nota de falecimento</a></h3>
+            <p>Comunicado à comunidade académica e aos membros da associação.</p>
+          </div>
+        </article>
+        <article class="news-card">
+          <img src="./Blog_files/Ocean-acidification-training.jpeg.webp" alt="">
+          <div>
+            <h3><a href="#">Posse histórica: Universidade Metodista Unida de Moçambique</a></h3>
+            <p>Cobertura do evento e do percurso da instituição.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-box">
+          <img src="./AAMIHE_files/Logo-Small.png.webp" alt="AAMIHE">
+        </div>
+        <p data-i18n="footerLead">A AAMIHE é uma associação de instituições de ensino superior metodistas ou afins, criada em setembro de 2014 em Nairóbi, Quénia.</p>
+      </div>
+      <div class="footer-widget footer-links">
+        <h3 data-i18n="footerLinksTitle">Links úteis</h3>
+        <ul>
+          <li><a href="#" data-i18n="footerL1">Direção</a></li>
+          <li><a href="#" data-i18n="footerL2">Galeria de fotos</a></li>
+          <li><a href="#" data-i18n="footerL3">Documentos</a></li>
+          <li><a href="#" data-i18n="footerL4">Eventos</a></li>
+          <li><a href="#" data-i18n="footerL5">Países membros</a></li>
+          <li><a href="#" data-i18n="footerL6">Universidades filiadas</a></li>
+          <li><a href="#" data-i18n="footerL7">Arquivo</a></li>
+        </ul>
+      </div>
+      <div class="footer-widget">
+        <h3 data-i18n="visitTitle">Visite-nos</h3>
+        <p class="visit-intro" data-i18n="visitIntro">Os nossos escritórios estão nos países associados; em Moçambique:</p>
+        <div class="contact-block">
+          <div class="ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>
+          </div>
+          <div><strong data-i18n="lblAddress">Morada:</strong> Pestana Rovuma Hotel, Maputo</div>
+        </div>
+        <div class="contact-block">
+          <div class="ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 512 512" fill="currentColor"><path d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"/></svg>
+          </div>
+          <div><strong data-i18n="lblPhone">Telefone:</strong> +258 84 308 9820</div>
+        </div>
+        <div class="contact-block">
+          <div class="ico" aria-hidden="true">
+            <svg width="16" height="16" aria-hidden="true" class="e-font-icon-svg e-fas-envelope" viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7z"></path><path d="M256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"></path></svg>
+          </div>
+          <div><strong data-i18n="lblEmail">E-mail:</strong> geral@aamihe.com</div>
+        </div>
+      </div>
+      <div class="footer-widget">
+        <h3 data-i18n="newsletterTitle">Newsletter</h3>
+        <p data-i18n="newsletterHint">Receba as nossas atualizações.</p>
+        <form class="newsletter-form" action="#" method="post">
+          <div class="row">
+            <input type="email" name="email" id="newsletter-email" data-i18n-placeholder="newsletterPh" placeholder="Seu endereço electrónico" autocomplete="email">
+            <button type="submit" data-i18n="newsletterSubmit">IR</button>
+          </div>
+          <label><input type="checkbox" name="gdpr" value="1"> <span data-i18n="newsletterGdpr">Aceite os termos e condições</span></label>
+        </form>
+        <h3 style="margin-top:24px;" data-i18n="followTitle">Siga-nos</h3>
+        <div class="social-row">
+          <a href="#" aria-label="X"><svg width="18" height="18" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M389.2 48h70.6L305.6 224.2 487 464h-191.2L265.4 331.7 123.3 464h-70.6l154-175.2L36 48h196.2l85.9 119.4L389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 512 512" fill="currentColor"><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 448 512" fill="currentColor"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.99-99.5 9-132.1 9s-102.7 2.99-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.99-29.5-9-99.5-9-132.1s-2.99-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.99 99.5-9 132.1-9s102.7-2.99 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.99 29.5 9 99.5 9 132.1s2.99 102.7-9 132.1z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 448 512" fill="currentColor"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-65.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.6h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a class="scroll-top" href="#" aria-label="Voltar ao topo" data-i18n-aria="ariaScrollTop">↑</a>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = "aamihe-locale";
+
+      var STRINGS = {
+        pt: {
+          ariaMenuClose: "Fechar menu",
+          ariaMenuOpen: "Abrir menu",
+          ariaScrollTop: "Voltar ao topo",
+          ariaSearch: "Pesquisar",
+          confDate: "13 a 15 de outubro de 2025",
+          confDateLabel: "A realizar:",
+          confLead: "Junte-se a líderes educacionais, investigadores e instituições metodistas de ensino superior na conferência sobre parcerias panafricanas para o desenvolvimento sustentável do ensino superior.",
+          confTitle: "A Conferência",
+          confVenue: "Hotel Birchwood, Joanesburgo, África do Sul",
+          countriesTitle: "Países associados",
+          countryMZ: "Moçambique",
+          countryNG: "Nigéria",
+          countrySL: "Serra Leoa",
+          countryTZ: "Tanzânia",
+          direcaoIntro: "A AAMIHE agrega instituições metodistas de ensino superior em África — conheça alguns membros da direção.",
+          direcaoTitle: "A Direcção",
+          followTitle: "Siga-nos",
+          footerL1: "Direção",
+          footerL2: "Galeria de fotos",
+          footerL3: "Documentos",
+          footerL4: "Eventos",
+          footerL5: "Países membros",
+          footerL6: "Universidades filiadas",
+          footerL7: "Arquivo",
+          footerLead: "A AAMIHE é uma associação de instituições de ensino superior metodistas ou afins, criada em setembro de 2014 em Nairóbi, Quénia.",
+          footerLinksTitle: "Links úteis",
+          langEn: "Inglês",
+          langFr: "Francês",
+          langPt: "Português",
+          lblAddress: "Morada:",
+          lblEmail: "E-mail:",
+          lblPhone: "Telefone:",
+          missionSr: "Missão e visão",
+          missionText: "Partilhar experiências e criar mecanismos de cooperação para consolidar as instituições metodistas de ensino superior em África.",
+          missionTitle: "Missão",
+          navAbout: "SOBRE-NÓS",
+          navBlog: "BLOG",
+          navConference: "CONFERÊNCIA",
+          navContact: "CONTACTE-NOS",
+          navHome: "INÍCIO",
+          navServices: "SERVIÇOS",
+          newsletterGdpr: "Aceite os termos e condições",
+          newsletterHint: "Receba as nossas atualizações.",
+          newsletterPh: "O seu endereço electrónico",
+          newsletterSubmit: "IR",
+          newsletterTitle: "Newsletter",
+          newsTitle: "Notícias",
+          readMore: "LEIA MAIS",
+          sobreText: "A AAMIHE é uma associação de instituições de ensino superior da Igreja Metodista Unida ou relacionadas, unanimemente criada numa conferência das instituições de ensino superior da Igreja Metodista Unida em África, em Setembro de 2014, em Nairóbi — Quénia.",
+          sobreTitle: "Sobre nós",
+          visionText: "Ser referência continental na integração e no fortalecimento das instituições metodistas de ensino superior e do desenvolvimento educativo em África.",
+          visionTitle: "Visão",
+          visitIntro: "Os nossos escritórios estão nos países associados; em Moçambique:",
+          visitTitle: "Visite-nos",
+          welcomeDesc: "AAMIHE — Associação Africana de Instituições Metodistas de Ensino Superior",
+          welcomeSrTitle: "Boas-vindas",
+          welcomeTitle: "BEM–VINDO"
+        },
+        en: {
+          ariaMenuClose: "Close menu",
+          ariaMenuOpen: "Open menu",
+          ariaScrollTop: "Back to top",
+          ariaSearch: "Search",
+          confDate: "13–15 October 2025",
+          confDateLabel: "When:",
+          confLead: "Join educational leaders, researchers and Methodist higher education institutions to explore pan‑African partnerships for sustainable higher education.",
+          confTitle: "The conference",
+          confVenue: "Birchwood Hotel, Johannesburg, South Africa",
+          countriesTitle: "Member countries",
+          countryMZ: "Mozambique",
+          countryNG: "Nigeria",
+          countrySL: "Sierra Leone",
+          countryTZ: "Tanzania",
+          direcaoIntro: "AAMIHE brings together Methodist higher education institutions across Africa — meet members of the leadership.",
+          direcaoTitle: "Leadership",
+          followTitle: "Follow us",
+          footerL1: "Leadership",
+          footerL2: "Photo gallery",
+          footerL3: "Documents",
+          footerL4: "Events",
+          footerL5: "Member countries",
+          footerL6: "Affiliated universities",
+          footerL7: "Archive",
+          footerLead: "AAMIHE is an association of Methodist-related higher education institutions, founded in September 2014 in Nairobi, Kenya.",
+          footerLinksTitle: "Useful links",
+          langEn: "English",
+          langFr: "French",
+          langPt: "Portuguese",
+          lblAddress: "Address:",
+          lblEmail: "E-mail:",
+          lblPhone: "Phone:",
+          missionSr: "Mission and vision",
+          missionText: "Share experiences and build cooperation mechanisms to strengthen Methodist higher education institutions across Africa.",
+          missionTitle: "Mission",
+          navAbout: "ABOUT",
+          navBlog: "BLOG",
+          navConference: "CONFERENCE",
+          navContact: "CONTACT",
+          navHome: "HOME",
+          navServices: "SERVICES",
+          newsletterGdpr: "I accept the terms and conditions",
+          newsletterHint: "Stay informed with our updates.",
+          newsletterPh: "Your email address",
+          newsletterSubmit: "SUBMIT",
+          newsletterTitle: "Newsletter",
+          newsTitle: "News",
+          readMore: "READ MORE",
+          sobreText: "AAMIHE is an association of United Methodist-related higher education institutions, unanimously established at an Africa-wide conference of UMC HE institutions in September 2014 in Nairobi — Kenya.",
+          sobreTitle: "About us",
+          visionText: "Be the continental benchmark for integrating and strengthening Methodist higher education and educational development across Africa.",
+          visionTitle: "Vision",
+          visitIntro: "Our offices span member countries; in Mozambique:",
+          visitTitle: "Visit us",
+          welcomeDesc: "AAMIHE — African Association of Methodist Higher Education Institutions",
+          welcomeSrTitle: "Welcome",
+          welcomeTitle: "WELCOME"
+        },
+        fr: {
+          ariaMenuClose: "Fermer le menu",
+          ariaMenuOpen: "Ouvrir le menu",
+          ariaScrollTop: "Retour en haut",
+          ariaSearch: "Rechercher",
+          confDate: "13 au 15 octobre 2025",
+          confDateLabel: "Dates :",
+          confLead: "Conférence réunissant dirigeants, chercheurs et institutions méthodistes d\'enseignement supérieur autour du partenariat panafricain et d\'un développement durable.",
+          confTitle: "La conférence",
+          confVenue: "Hôtel Birchwood, Johannesburg, Afrique du Sud",
+          countriesTitle: "Pays associés",
+          countryMZ: "Mozambique",
+          countryNG: "Nigeria",
+          countrySL: "Sierra Leone",
+          countryTZ: "Tanzanie",
+          direcaoIntro: "L\'AAMIHE regroupe les institutions méthodistes d\'enseignement supérieur en Afrique — quelques membres de la direction.",
+          direcaoTitle: "Direction",
+          followTitle: "Suivez‑nous",
+          footerL1: "Direction",
+          footerL2: "Galerie photos",
+          footerL3: "Documents",
+          footerL4: "Événements",
+          footerL5: "Pays membres",
+          footerL6: "Universités affiliées",
+          footerL7: "Archives",
+          footerLead: "L\'AAMIHE est une association d\'institutions méthodistes d\'enseignement supérieur, créée en septembre 2014 à Nairobi — Kenya.",
+          footerLinksTitle: "Liens utiles",
+          langEn: "Anglais",
+          langFr: "Français",
+          langPt: "Portugais",
+          lblAddress: "Adresse :",
+          lblEmail: "E-mail :",
+          lblPhone: "Téléphone :",
+          missionSr: "Mission et vision",
+          missionText: "Partager les expériences et renforcer les mécanismes de coopération entre les institutions méthodistes d\'enseignement supérieur en Afrique.",
+          missionTitle: "Mission",
+          navAbout: "À PROPOS",
+          navBlog: "BLOG",
+          navConference: "CONFÉRENCE",
+          navContact: "CONTACT",
+          navHome: "ACCUEIL",
+          navServices: "SERVICES",
+          newsletterGdpr: "J\'accepte les conditions générales",
+          newsletterHint: "Recevez nos actualités.",
+          newsletterPh: "Votre adresse e‑mail",
+          newsletterSubmit: "OK",
+          newsletterTitle: "Lettre d’information",
+          newsTitle: "Actualités",
+          readMore: "EN SAVOIR PLUS",
+          sobreText: "L\'AAMIHE est une association d\'établissements d\'enseignement supérieur liés à l\'Église méthodiste unie, créée à l\'unanimité lors d\'une conférence africaine en septembre 2014 à Nairobi — Kenya.",
+          sobreTitle: "À propos",
+          visionText: "Être la référence continentale pour l\'intégration et le renforcement des institutions méthodistes d\'enseignement supérieur et du développement éducatif en Afrique.",
+          visionTitle: "Vision",
+          visitIntro: "Nos bureaux sont dans les pays membres ; au Mozambique :",
+          visitTitle: "Nous rendre visite",
+          welcomeDesc: "AAMIHE — Association africaine des institutions méthodistes d’enseignement supérieur",
+          welcomeSrTitle: "Bienvenue",
+          welcomeTitle: "BIENVENUE"
+        }
+      };
+
+      function getLang() {
+        try {
+          var stored = localStorage.getItem(STORAGE_KEY);
+          if (stored && STRINGS[stored]) return stored;
+        } catch (e) {}
+        return "pt";
+      }
+
+      function t(lang, key) {
+        var pack = STRINGS[lang] || STRINGS.pt;
+        if (pack[key] !== undefined) return pack[key];
+        var fb = STRINGS.pt[key];
+        return fb !== undefined ? fb : "";
+      }
+
+      function applyLocale(lang) {
+        if (!STRINGS[lang]) lang = "pt";
+        try {
+          localStorage.setItem(STORAGE_KEY, lang);
+        } catch (e) {}
+
+        document.documentElement.setAttribute("lang", lang === "en" ? "en-GB" : lang === "fr" ? "fr-FR" : "pt-PT");
+
+        document.querySelectorAll("[data-i18n]").forEach(function (el) {
+          var key = el.getAttribute("data-i18n");
+          el.textContent = t(lang, key);
+        });
+
+        document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+          var pk = el.getAttribute("data-i18n-placeholder");
+          el.placeholder = t(lang, pk);
+        });
+
+        document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
+          var ak = el.getAttribute("data-i18n-aria");
+          el.setAttribute("aria-label", t(lang, ak));
+        });
+
+        document.querySelectorAll(".lang-btn[data-locale]").forEach(function (btn) {
+          btn.classList.toggle("is-current", btn.getAttribute("data-locale") === lang);
+        });
+
+        var btn = document.getElementById("burger-btn");
+        var menu = document.getElementById("mobile-menu");
+        if (btn && menu) {
+          var open = menu.classList.contains("is-open");
+          btn.setAttribute("aria-label", open ? t(lang, "ariaMenuClose") : t(lang, "ariaMenuOpen"));
+        }
+      }
+
+      document.querySelectorAll(".lang-btn[data-locale]").forEach(function (link) {
+        link.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          var locale = link.getAttribute("data-locale");
+          if (locale) applyLocale(locale);
+        });
+      });
+
+      var btn = document.getElementById("burger-btn");
+      var menu = document.getElementById("mobile-menu");
+      if (btn && menu) {
+        btn.addEventListener("click", function () {
+          var lg = getLang();
+          var open = menu.classList.toggle("is-open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          btn.setAttribute("aria-label", open ? t(lg, "ariaMenuClose") : t(lg, "ariaMenuOpen"));
+        });
+      }
+
+      applyLocale(getLang());
+    })();
+  </script>
+</body>
+</html>
