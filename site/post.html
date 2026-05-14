@@ -5,6 +5,26 @@
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 
 	<title>GoL, UMU, EPA Launch Ocean Acidification Training – AAMIHE</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet"><style>h1, h2, h3, h4, h5, h6, p, .elementor-heading-title, .elementor-text-editor, .elementor-item, .elementor-slide-heading, .elementor-slide-description, #footer-widgets *, #footer-bottom * { font-family: "Roboto Slab", serif !important; } .recent-post-card a:hover, .archive-list a:hover { color: #cca876 !important; } #content-wrap { padding-top: 0 !important; }</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const title = urlParams.get('title');
+	const img = urlParams.get('img');
+	const date = urlParams.get('date');
+
+	if (title) {
+		document.querySelector('.single-post-content h1').innerText = decodeURIComponent(title);
+		document.title = decodeURIComponent(title) + ' – AAMIHE';
+	}
+	if (img) {
+		document.querySelector('.custom-page-banner').style.background = `url('${decodeURIComponent(img)}') no-repeat center center`;
+		document.querySelector('.custom-page-banner').style.backgroundSize = 'cover';
+	}
+	if (date) {
+		document.querySelector('.meta-date').innerHTML = `<i class=" icon-clock" aria-hidden="true" role="img"></i> ` + decodeURIComponent(date);
+	}
+});
+</script>
 <meta name="robots" content="max-image-preview:large">
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="dns-prefetch" href="https://fonts.googleapis.com/">
 <link rel="alternate" type="application/rss+xml" title="AAMIHE » Feed" href="https://aamihe.com/feed/">
