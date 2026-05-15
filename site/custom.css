@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+* {
+    font-family: "Roboto Slab", serif !important;
+}
+
+/* Espaço para a barra do menu não cobrir a top bar */
+.elementor-element-fe28ca5 {
+    margin-top: 50px !important;
+}
+
+/* Configurações da barra laranja no scroll (copiado de home-aamihe.html) */
+.elementor-welcome-slides.e-con-boxed {
+    position: sticky !important;
+    top: -10px !important;
+    z-index: 90 !important;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Aplicando a mesma regra para o cabeçalho pegajoso das novas páginas */
+.elementor-element-89815fd {
+    position: sticky !important;
+    top: -10px !important;
+    z-index: 90 !important;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2) !important;
+}
