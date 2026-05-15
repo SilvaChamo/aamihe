@@ -52,6 +52,17 @@ function injectNewsEndpoint(html: string) {
   return html.replace('</head>', `${configScript}\n</head>`);
 }
 
+function injectRobotoSlab(html: string) {
+  const fontLink = `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet">
+<style>* { font-family: "Roboto Slab", serif !important; }</style>`;
+
+  if (html.includes('Roboto+Slab')) return html;
+  return html.replace('</head>', `${fontLink}\n</head>`);
+}
+
+
 async function readFirstExisting(candidates: string[]) {
   for (const candidate of candidates) {
     if (!candidate.startsWith(CLONED_SITE_ROOT)) continue;
@@ -84,7 +95,7 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
   const extension = path.extname(result.filePath) || '.html';
   const contentType = CONTENT_TYPES[extension] || 'application/octet-stream';
   const isHtml = extension === '.html' || extension === '.htm';
-  const body = isHtml ? injectNewsEndpoint(result.body.toString('utf8')) : result.body;
+  const body = isHtml ? injectRobotoSlab(injectNewsEndpoint(result.body.toString('utf8'))) : result.body;
 
   return new NextResponse(body, {
     headers: {
