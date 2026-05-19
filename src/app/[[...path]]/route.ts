@@ -21,15 +21,11 @@ const CONTENT_TYPES: Record<string, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Índice automático de imagens
-// Varre toda a pasta /site/ recursivamente e constrói um mapa
-// filename (lowercase) → caminho relativo dentro de /site/
-// Ex: "angola-1.png" → "Paises membros_files/Angola-1.png"
+// Automatic Image Indexer
 // ---------------------------------------------------------------------------
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico']);
 
-// Cache em memória para não reindexar em cada pedido
 let imageIndex: Map<string, string> | null = null;
 
 async function buildImageIndex(): Promise<Map<string, string>> {
@@ -52,19 +48,15 @@ async function buildImageIndex(): Promise<Map<string, string>> {
         const ext = path.extname(entry.name).toLowerCase();
         if (IMAGE_EXTENSIONS.has(ext)) {
           const nameLower = entry.name.toLowerCase();
-          // 1. Nome exacto (case-insensitive)
           index.set(nameLower, entryRelative);
 
-          // 2. Nome sem sufixo de dimensões WordPress (-300x200, -150x150, -scaled, etc.)
-          //    Ex: "angola-1-300x200.png.webp" → "angola-1.png.webp" → "angola-1.png"
           const stripped = nameLower
-            .replace(/-\d+x\d+(?=\.\w)/, '')   // remove -300x200 antes da extensão
-            .replace(/-scaled(?=\.\w)/, '')      // remove -scaled antes da extensão
-            .replace(/\.png\.webp$/, '.png')     // normaliza .png.webp → .png
-            .replace(/\.jpg\.webp$/, '.jpg')     // normaliza .jpg.webp → .jpg
-            .replace(/\.jpeg\.webp$/, '.jpeg');  // normaliza .jpeg.webp → .jpeg
+            .replace(/-\d+x\d+(?=\.\w)/, '')
+            .replace(/-scaled(?=\.\w)/, '')
+            .replace(/\.png\.webp$/, '.png')
+            .replace(/\.jpg\.webp$/, '.jpg')
+            .replace(/\.jpeg\.webp$/, '.jpeg');
           if (stripped !== nameLower) {
-            // Só guarda se não existir já uma entrada mais exacta
             if (!index.has(stripped)) index.set(stripped, entryRelative);
           }
         }
@@ -77,44 +69,31 @@ async function buildImageIndex(): Promise<Map<string, string>> {
   return index;
 }
 
-/**
- * Dado o nome de um ficheiro extraído de uma URL do WordPress,
- * devolve o caminho relativo correcto dentro de /site/.
- * Estratégia de correspondência por ordem de prioridade:
- *   1. Exacto (case-insensitive)
- *   2. Nome normalizado (.png.webp → .png, sufixos de dimensão removidos)
- *   3. Qualquer ficheiro cujo nome base começa com o mesmo prefixo
- */
 async function resolveImagePath(filename: string): Promise<string> {
   const index = await buildImageIndex();
   const lower = filename.toLowerCase();
 
-  // Tentativa 1: nome exacto case-insensitive
   if (index.has(lower)) return `/${index.get(lower)!}`;
 
-  // Tentativa 2: normaliza a extensão (.png.webp → .png)
   const normalized = lower
     .replace(/\.png\.webp$/, '.png')
     .replace(/\.jpg\.webp$/, '.jpg')
     .replace(/\.jpeg\.webp$/, '.jpeg');
   if (normalized !== lower && index.has(normalized)) return `/${index.get(normalized)!}`;
 
-  // Tentativa 3: procura por prefixo de nome base (Angola-1.png → procura angola-1*)
-  const baseName = lower.replace(/\.[^.]+$/, ''); // remove extensão
+  const baseName = lower.replace(/\.[^.]+$/, '');
   for (const [key, val] of index) {
-    // O ficheiro local começa com o mesmo nome base?
     const keyBase = key.replace(/-\d+x\d+/, '').replace(/-scaled/, '').replace(/\.[^.]+$/, '').replace(/\.png$/, '');
     if (keyBase === baseName || keyBase === baseName.replace(/\.[^.]+$/, '')) {
       return `/${val}`;
     }
   }
 
-  // Fallback: devolve o caminho tal qual (resultará em 404 se não existir)
   return `/${filename}`;
 }
 
 // ---------------------------------------------------------------------------
-// Injecções de HTML
+// HTML Injectors
 // ---------------------------------------------------------------------------
 
 function injectNewsEndpoint(html: string) {
@@ -136,16 +115,9 @@ function injectRobotoSlab(html: string) {
   return html.replace('</head>', `${fontLink}\n</head>`);
 }
 
-/**
- * Substitui TODAS as referências a imagens do WordPress
- * (background-image, src, href) pelos caminhos locais correctos,
- * usando o índice automático de ficheiros em /site/.
- */
 async function fixExternalImages(html: string): Promise<string> {
-  // 1. Remove srcset que apontem para aamihe.com (evita pedidos externos)
   html = html.replace(/\s*srcset="[^"]*aamihe\.com[^"]*"/g, '');
 
-  // 2. Colecta todos os nomes de ficheiro únicos referenciados via WordPress URLs
   const WP_URL_RE = /https:\/\/aamihe\.com\/wp-content\/uploads\/\d{4}\/\d{2}\/([^"')]+)/g;
   const uniqueFilenames = new Set<string>();
   let m: RegExpExecArray | null;
@@ -153,7 +125,6 @@ async function fixExternalImages(html: string): Promise<string> {
     uniqueFilenames.add(m[1]);
   }
 
-  // 3. Resolve todos os caminhos em paralelo
   const resolved = new Map<string, string>();
   await Promise.all(
     [...uniqueFilenames].map(async (filename) => {
@@ -161,7 +132,6 @@ async function fixExternalImages(html: string): Promise<string> {
     })
   );
 
-  // 4. Substituição global: qualquer padrão WordPress → caminho local
   html = html.replace(
     /https:\/\/aamihe\.com\/wp-content\/uploads\/\d{4}\/\d{2}\/([^"')]+)/g,
     (_match, filename) => resolved.get(filename) ?? `/${filename}`
@@ -171,8 +141,13 @@ async function fixExternalImages(html: string): Promise<string> {
 }
 
 // ---------------------------------------------------------------------------
-// Servir ficheiros estáticos
+// Static File Serving
 // ---------------------------------------------------------------------------
+
+interface SiteFileResult {
+  filePath: string;
+  body: Uint8Array;
+}
 
 function normalizeSegments(segments: string[] = []) {
   return segments.filter(segment => segment && segment !== '..' && !segment.includes(path.sep));
@@ -197,76 +172,81 @@ function buildCandidates(segments: string[]) {
   ];
 }
 
-async function readFirstExisting(candidates: string[]) {
+async function readFirstExisting(candidates: string[]): Promise<SiteFileResult | null> {
   for (const candidate of candidates) {
     if (!candidate.startsWith(CLONED_SITE_ROOT)) continue;
     try {
+      const buf = await readFile(candidate);
       return {
         filePath: candidate,
-        body: await readFile(candidate),
+        body: new Uint8Array(buf),
       };
     } catch {
-      // Tenta o próximo candidato.
+      // Tenta o próximo
     }
   }
   return null;
 }
 
-/**
- * Rede de segurança: quando uma imagem não é encontrada no caminho exacto,
- * procura em TODAS as subdirectorias de /site/ por qualquer ficheiro
- * cujo nome base (sem sufixos -NxN, -scaled, sem extensão dupla) corresponda.
- * Ex: pedido "Angola-1.png" → encontra "Paises membros_files/Angola-1-300x200.png.webp"
- */
-function normalizeBaseName(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/-\d+x\d+(?=\.)/g, '')   // remove -300x200 antes de extensão
-    .replace(/-scaled(?=\.)/g, '')      // remove -scaled antes de extensão
-    .replace(/\.png\.webp$/, '.png')    // .png.webp → .png
-    .replace(/\.jpg\.webp$/, '.jpg')    // .jpg.webp → .jpg
-    .replace(/\.jpeg\.webp$/, '.jpeg')  // .jpeg.webp → .jpeg
-    .replace(/\.[^.]+$/, '');           // remove extensão final → nome base puro
-}
-
-async function fallbackImageSearch(filename: string): Promise<{ filePath: string; body: Buffer } | null> {
+async function fallbackImageSearch(filename: string): Promise<SiteFileResult | null> {
   const targetBase = normalizeBaseName(filename);
   if (!targetBase) return null;
 
-  let dirs: import('node:fs').Dirent[];
+  let dirs;
   try {
     dirs = await readdir(CLONED_SITE_ROOT, { withFileTypes: true });
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 
   for (const dir of dirs) {
     if (!dir.isDirectory()) continue;
     const dirPath = path.join(CLONED_SITE_ROOT, dir.name);
     let files: string[];
-    try { files = await readdir(dirPath); } catch { continue; }
+    try {
+      files = await readdir(dirPath);
+    } catch {
+      continue;
+    }
 
     for (const file of files) {
       if (normalizeBaseName(file) === targetBase) {
         const filePath = path.join(dirPath, file);
         try {
-          const body = await readFile(filePath);
-          return { filePath, body };
-        } catch { continue; }
+          const buf = await readFile(filePath);
+          return {
+            filePath,
+            body: new Uint8Array(buf),
+          };
+        } catch {
+          continue;
+        }
       }
     }
   }
   return null;
 }
 
+function normalizeBaseName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/-\d+x\d+(?=\.)/g, '')
+    .replace(/-scaled(?=\.)/g, '')
+    .replace(/\.png\.webp$/, '.png')
+    .replace(/\.jpg\.webp$/, '.jpg')
+    .replace(/\.jpeg\.webp$/, '.jpeg')
+    .replace(/\.[^.]+$/, '');
+}
+
 // ---------------------------------------------------------------------------
-// Handler principal
+// GET Handler
 // ---------------------------------------------------------------------------
 
 export async function GET(_request: Request, context: { params: Promise<{ path?: string[] }> }) {
   const params = await context.params;
   const segments = normalizeSegments(params.path);
-  let result = await readFirstExisting(buildCandidates(segments));
+  let result: SiteFileResult | null = await readFirstExisting(buildCandidates(segments));
 
-  // Rede de segurança para imagens: procura em todas as subpastas se não encontrado
   if (!result && segments.length > 0) {
     const lastSegment = segments[segments.length - 1];
     const ext = path.extname(lastSegment).toLowerCase();
@@ -285,13 +265,12 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
 
   let body: string | Uint8Array;
   if (isHtml) {
-    let html = result.body.toString('utf8');
-    html = await fixExternalImages(html);
-    html = injectNewsEndpoint(html);
-    html = injectRobotoSlab(html);
-    body = html;
+    const html = new TextDecoder('utf-8').decode(result.body);
+    body = await fixExternalImages(html);
+    body = injectNewsEndpoint(body);
+    body = injectRobotoSlab(body);
   } else {
-    body = new Uint8Array(result.body);
+    body = result.body;
   }
 
   return new NextResponse(body, {
@@ -301,4 +280,3 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
     },
   });
 }
-
