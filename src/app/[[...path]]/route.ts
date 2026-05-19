@@ -51,10 +51,22 @@ async function buildImageIndex(): Promise<Map<string, string>> {
       } else if (entry.isFile()) {
         const ext = path.extname(entry.name).toLowerCase();
         if (IMAGE_EXTENSIONS.has(ext)) {
-          // Guarda por nome exacto e por nome em minúsculas (para correspondência insensível a maiúsculas)
-          index.set(entry.name.toLowerCase(), entryRelative);
-          // Também guarda sem extensão duplicada (.png.webp → nome base)
-          index.set(entry.name, entryRelative);
+          const nameLower = entry.name.toLowerCase();
+          // 1. Nome exacto (case-insensitive)
+          index.set(nameLower, entryRelative);
+
+          // 2. Nome sem sufixo de dimensões WordPress (-300x200, -150x150, -scaled, etc.)
+          //    Ex: "angola-1-300x200.png.webp" → "angola-1.png.webp" → "angola-1.png"
+          const stripped = nameLower
+            .replace(/-\d+x\d+(?=\.\w)/, '')   // remove -300x200 antes da extensão
+            .replace(/-scaled(?=\.\w)/, '')      // remove -scaled antes da extensão
+            .replace(/\.png\.webp$/, '.png')     // normaliza .png.webp → .png
+            .replace(/\.jpg\.webp$/, '.jpg')     // normaliza .jpg.webp → .jpg
+            .replace(/\.jpeg\.webp$/, '.jpeg');  // normaliza .jpeg.webp → .jpeg
+          if (stripped !== nameLower) {
+            // Só guarda se não existir já uma entrada mais exacta
+            if (!index.has(stripped)) index.set(stripped, entryRelative);
+          }
         }
       }
     }
@@ -68,24 +80,36 @@ async function buildImageIndex(): Promise<Map<string, string>> {
 /**
  * Dado o nome de um ficheiro extraído de uma URL do WordPress,
  * devolve o caminho relativo correcto dentro de /site/.
- * Tenta primeiro correspondência exacta, depois sem extensão extra (.png.webp → .webp).
+ * Estratégia de correspondência por ordem de prioridade:
+ *   1. Exacto (case-insensitive)
+ *   2. Nome normalizado (.png.webp → .png, sufixos de dimensão removidos)
+ *   3. Qualquer ficheiro cujo nome base começa com o mesmo prefixo
  */
 async function resolveImagePath(filename: string): Promise<string> {
   const index = await buildImageIndex();
-
-  // Tentativa 1: nome exacto
-  if (index.has(filename)) return `/${index.get(filename)!}`;
-
-  // Tentativa 2: correspondência case-insensitive
   const lower = filename.toLowerCase();
+
+  // Tentativa 1: nome exacto case-insensitive
   if (index.has(lower)) return `/${index.get(lower)!}`;
 
-  // Tentativa 3: versão .webp do ficheiro (WordPress converte muitas imagens)
-  const asWebp = lower.replace(/\.(png|jpg|jpeg)$/, '.png.webp')
-                       .replace(/\.png\.webp$/, '.png.webp');
-  if (index.has(asWebp)) return `/${index.get(asWebp)!}`;
+  // Tentativa 2: normaliza a extensão (.png.webp → .png)
+  const normalized = lower
+    .replace(/\.png\.webp$/, '.png')
+    .replace(/\.jpg\.webp$/, '.jpg')
+    .replace(/\.jpeg\.webp$/, '.jpeg');
+  if (normalized !== lower && index.has(normalized)) return `/${index.get(normalized)!}`;
 
-  // Fallback: serve da raiz (pode resultar em 404 mas não quebra o regex)
+  // Tentativa 3: procura por prefixo de nome base (Angola-1.png → procura angola-1*)
+  const baseName = lower.replace(/\.[^.]+$/, ''); // remove extensão
+  for (const [key, val] of index) {
+    // O ficheiro local começa com o mesmo nome base?
+    const keyBase = key.replace(/-\d+x\d+/, '').replace(/-scaled/, '').replace(/\.[^.]+$/, '').replace(/\.png$/, '');
+    if (keyBase === baseName || keyBase === baseName.replace(/\.[^.]+$/, '')) {
+      return `/${val}`;
+    }
+  }
+
+  // Fallback: devolve o caminho tal qual (resultará em 404 se não existir)
   return `/${filename}`;
 }
 
@@ -188,6 +212,51 @@ async function readFirstExisting(candidates: string[]) {
   return null;
 }
 
+/**
+ * Rede de segurança: quando uma imagem não é encontrada no caminho exacto,
+ * procura em TODAS as subdirectorias de /site/ por qualquer ficheiro
+ * cujo nome base (sem sufixos -NxN, -scaled, sem extensão dupla) corresponda.
+ * Ex: pedido "Angola-1.png" → encontra "Paises membros_files/Angola-1-300x200.png.webp"
+ */
+function normalizeBaseName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/-\d+x\d+(?=\.)/g, '')   // remove -300x200 antes de extensão
+    .replace(/-scaled(?=\.)/g, '')      // remove -scaled antes de extensão
+    .replace(/\.png\.webp$/, '.png')    // .png.webp → .png
+    .replace(/\.jpg\.webp$/, '.jpg')    // .jpg.webp → .jpg
+    .replace(/\.jpeg\.webp$/, '.jpeg')  // .jpeg.webp → .jpeg
+    .replace(/\.[^.]+$/, '');           // remove extensão final → nome base puro
+}
+
+async function fallbackImageSearch(filename: string): Promise<{ filePath: string; body: Buffer } | null> {
+  const targetBase = normalizeBaseName(filename);
+  if (!targetBase) return null;
+
+  let dirs: import('node:fs').Dirent[];
+  try {
+    dirs = await readdir(CLONED_SITE_ROOT, { withFileTypes: true });
+  } catch { return null; }
+
+  for (const dir of dirs) {
+    if (!dir.isDirectory()) continue;
+    const dirPath = path.join(CLONED_SITE_ROOT, dir.name);
+    let files: string[];
+    try { files = await readdir(dirPath); } catch { continue; }
+
+    for (const file of files) {
+      if (normalizeBaseName(file) === targetBase) {
+        const filePath = path.join(dirPath, file);
+        try {
+          const body = await readFile(filePath);
+          return { filePath, body };
+        } catch { continue; }
+      }
+    }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // Handler principal
 // ---------------------------------------------------------------------------
@@ -195,7 +264,16 @@ async function readFirstExisting(candidates: string[]) {
 export async function GET(_request: Request, context: { params: Promise<{ path?: string[] }> }) {
   const params = await context.params;
   const segments = normalizeSegments(params.path);
-  const result = await readFirstExisting(buildCandidates(segments));
+  let result = await readFirstExisting(buildCandidates(segments));
+
+  // Rede de segurança para imagens: procura em todas as subpastas se não encontrado
+  if (!result && segments.length > 0) {
+    const lastSegment = segments[segments.length - 1];
+    const ext = path.extname(lastSegment).toLowerCase();
+    if (IMAGE_EXTENSIONS.has(ext)) {
+      result = await fallbackImageSearch(lastSegment);
+    }
+  }
 
   if (!result) {
     return new NextResponse('Página não encontrada.', { status: 404 });
@@ -205,7 +283,7 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
   const contentType = CONTENT_TYPES[extension] || 'application/octet-stream';
   const isHtml = extension === '.html' || extension === '.htm';
 
-  let body: Buffer | string;
+  let body: string | Uint8Array;
   if (isHtml) {
     let html = result.body.toString('utf8');
     html = await fixExternalImages(html);
@@ -213,7 +291,7 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
     html = injectRobotoSlab(html);
     body = html;
   } else {
-    body = result.body;
+    body = new Uint8Array(result.body);
   }
 
   return new NextResponse(body, {
@@ -223,3 +301,4 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
     },
   });
 }
+
