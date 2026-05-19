@@ -41,7 +41,7 @@ export default function Header() {
       <div className="main-nav">
         <div className="container main-nav-container">
           <Link href="/" className="logo">
-            <Image src="/Logo-Small.png.webp" alt="AAMIHE Logo" width={150} height={42} />
+            <Image src="/logo.webp" alt="AAMIHE Logo" width={150} height={42} priority unoptimized />
           </Link>
           
           <nav className="nav">
