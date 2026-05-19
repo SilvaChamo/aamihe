@@ -273,7 +273,7 @@ export async function GET(_request: Request, context: { params: Promise<{ path?:
     body = result.body;
   }
 
-  return new NextResponse(body, {
+  return new NextResponse(body as any, {
     headers: {
       'Content-Type': contentType,
       'Cache-Control': isHtml ? 'no-store' : 'public, max-age=31536000, immutable',
